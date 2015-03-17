@@ -8,6 +8,7 @@
 
 #define ERROR (-1)
 #define BUF_SZ (1024)
+#define KILL_CMD "killcl"
 
 int main (int argc, char **argv)
 {
@@ -50,13 +51,13 @@ int main (int argc, char **argv)
 
 	printf(">Connection to remote-server[%s,%d] established\n",
 		(char*)inet_ntoa(remoteServerStruct.sin_addr),(int)remoteServerStruct.sin_port);
+	printf(">Enter '%s' to kill client\n",KILL_CMD);
 
 	printf(">Enter data(1msgLimit:%dB) to send to the remote-server:\n",BUF_SZ);
 	while(1)
 	{
 		fgets(input, BUF_SZ, stdin);
 
-		#define KILL_CMD "killcl"
 		if (strncmp(input,KILL_CMD,strlen("killcl")-1) == 0)
 		{
 			break;
