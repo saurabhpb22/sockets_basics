@@ -21,35 +21,35 @@ int main (int argc, char **argv)
         }
 
 	/* Variables declaration */
-	struct sockaddr_in remote_server;
-	int sock;
+	struct sockaddr_in remoteServerStruct;
+	int remoteServerSock;
 	char input[BUF_SZ], output[BUF_SZ];
 	int len;
 
-	/* Creating socket for remote server */
-	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == ERROR)
+	/* Creating remoteServerSocket for remote server */
+	if ((remoteServerSock = socket(AF_INET, SOCK_STREAM, 0)) == ERROR)
 	{
-		perror("socket");
+		perror("remoteServerSocket() error");
 		exit(-1);
 	}
 
-	printf(">Remote-server-socket created..\n");
+	printf(">Remote-server-remoteServerSocket created..\n");
 
-	remote_server.sin_family = AF_INET;
-	remote_server.sin_port = htons(atoi(argv[2]));
-	remote_server.sin_addr.s_addr = inet_addr(argv[1]);
-	bzero(&remote_server.sin_zero, 0);
+	remoteServerStruct.sin_family = AF_INET;
+	remoteServerStruct.sin_port = htons(atoi(argv[2]));
+	remoteServerStruct.sin_addr.s_addr = inet_addr(argv[1]);
+	bzero(&remoteServerStruct.sin_zero, 0);
 
 	/* Connect to the remote server using port and address */
-	if ((connect(sock, (struct sockaddr *)&remote_server, 
+	if ((connect(remoteServerSock, (struct sockaddr *)&remoteServerStruct, 
 		sizeof(struct sockaddr))) == ERROR)
 	{
-		perror("connect");
+		perror("connect() error");
 		exit(-1);
 	}
 
 	printf(">Connection to remote-server[%s,%d] established\n",
-	(char*)inet_ntoa(remote_server.sin_addr),(int)remote_server.sin_port);
+		(char*)inet_ntoa(remoteServerStruct.sin_addr),(int)remoteServerStruct.sin_port);
 
 	printf(">Enter data(1msgLimit:%dB) to send to the remote-server:\n",BUF_SZ);
 	while(1)
@@ -61,16 +61,16 @@ int main (int argc, char **argv)
 		{
 			break;
 		}
-		send(sock, input, strlen(input),0);
+		send(remoteServerSock, input, strlen(input),0);
 		printf(">[SENT]: %s",input);
 
-		len = recv(sock, output, BUF_SZ, 0);
+		len = recv(remoteServerSock, output, BUF_SZ, 0);
 		output[len] = '\0';
 		printf(">[RECV]: %s", output);
 	}
 
-	printf(">Closing remote-server-socket\n");
-	close(sock);
+	printf(">Closing remote-server-remoteServerSocket\n");
+	close(remoteServerSock);
 
 
 return 0;
